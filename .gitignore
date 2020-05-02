@@ -1,0 +1,14 @@
+poke_calc/poke_calc/__pycache__/*
+poke_calc/logs/*
+poke_calc/poke_calc/migrations
+poke_calc/poke_calc/*.sock
+poke_calc/poke_calc/wsgi.py
+
+*.log
+*.pyc
+*.bak
+
+bin
+include
+lib
+lib64
