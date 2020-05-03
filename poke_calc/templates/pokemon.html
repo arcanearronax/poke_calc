@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+  <style>
+
+    table {
+      border: 1px solid;
+      padding: 0px;
+    }
+
+    th {
+      border:2px solid;
+    }
+
+
+
+  </style>
+
+  <head>
+  </head>
+
+  <body>
+    <h1>{{ pokemon_name }}</h1>
+
+    <table>
+      <tr>
+        <th>Base Attack</th>
+        <th>Base Defense</th>
+        <th>Base Stamina</th>
+      </tr>
+      <tr>
+        <td>{{ base_atk }}</td>
+        <td>{{ base_def }}</td>
+        <td>{{ base_sta }}</td>
+      </tr>
+    </table>
+  </body>
+</html>

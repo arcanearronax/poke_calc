@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+  <style>
+
+    table {
+      border: 1px solid;
+      padding: 0px;
+    }
+
+    th {
+      border:2px solid;
+    }
+
+
+
+  </style>
+
+  <head>
+  </head>
+
+  <body>
+    <h1>{{ pokemon_name }}</h1>
+
+    <table>
+      <tr>
+        <th>Level</th>
+        <th>CP</th>
+        <th>Indiv Attack</th>
+        <th>Indiv Defense</th>
+        <th>Indiv Stamina</th>
+      </tr>
+
+      {% for entry in entries %}
+        <tr>
+          <td>{{ entry.level }}</td>
+          <td>{{ entry.cp }}
+          <td>{{ entry.indiv_atk }}</td>
+          <td>{{ entry.indiv_def }}</td>
+          <td>{{ entry.indiv_sta }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

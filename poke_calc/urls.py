@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import PokeView
+from .views import HomeView, PokemonView, PokemonStatsView
 
 urlpatterns = [
-    path('', PokeView.as_view(), name='homePage'),
+    path('', HomeView.as_view(), name='homePage'),
+    path('<slug:pokemon_name>/', PokemonView.as_view(), name='pokemonPage'),
+    path('stats/<slug:pokemon_name>/<slug:level>/', PokemonStatsView.as_view(), name='pokemonStats'),
 ]
