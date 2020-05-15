@@ -138,7 +138,7 @@ LOGGING = {
         'base_handler': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/home/webmaster/poke_calc/poke_calc/logs/basic.logs',
+            'filename': '/home/webmaster/poke_calc/logs/basic.log',
             'formatter': 'simple',
         },
     },

@@ -1,5 +1,5 @@
 from django.db import models
-from .pokemon_scraper import PokemonStatsScraper
+from .pokemon_scraper import PokemonScraper
 import logging
 
 logger = logging.getLogger('baselogger')
@@ -8,14 +8,10 @@ class Pokemon(models.Model):
     '''
     This is the Pokemon model. It holds information true for all pokemon.
     '''
-    pokemon_id = models.IntegerField(primary_key=True)
-    dex_num = models.IntegerField()
-    pokemon_name = models.CharField(max_length=100)
-    base_atk = models.IntegerField()
-    base_def = models.IntegerField()
-    base_sta = models.IntegerField()
-    aloan = models.NullBooleanField(default=False)
-    galarian = models.NullBooleanField(default=False)
+    poke_id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    dex_id = models.IntegerField()
+    form = models.CharField(max_length=20, null=True)
 
     @classmethod
     def get_by_name(cls, pokemon_name):
@@ -25,7 +21,7 @@ class Pokemon(models.Model):
         logger.info('Pokemon.get_by_name: {}'.format(pokemon_name))
 
         try:
-            return cls.objects.filter(pokemon_name=pokemon_name)[0]
+            return cls.objects.filter(pokemon_name=pokemon_name)
         except Exception as e:
             logger.info('EXCEPTION: {}'.format(e))
             return None
@@ -50,18 +46,16 @@ class Pokemon(models.Model):
         '''
         This is used to create new Pokemon entries
         '''
-        pass
+        raise NotImplementedError('Currently not supported')
 
 class PokemonStats(models.Model):
     '''
     This holds pokemon stats with their associated level.
     '''
-    pokemon_id = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
-    level = models.IntegerField()
-    cp = models.IntegerField()
-    indiv_atk = models.IntegerField()
-    indiv_def = models.IntegerField()
-    indiv_sta = models.IntegerField()
+    poke = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
+    base_atk = models.IntegerField()
+    base_def = models.IntegerField()
+    base_sta = models.IntegerField()
 
     @classmethod
     def get_entries_by_level(cls, pokemon_id,level):
@@ -77,10 +71,29 @@ class PokemonStats(models.Model):
             logger.info('PokemonStats.get_entries_by_level EXCEPTION: {}'.format(e))
             return None
 
+    @classmethod
+    def get_atk(cls, poke_id):
+        return cls.objects.get(poke_id=poke_id).base_atk
+
+    @classmethod
+    def get_def(cls, poke_id):
+        return cls.objects.get(poke_id=poke_id).base_def
+
+    @classmethod
+    def get_sta(cls, poke_id):
+        return cls.objects.get(poke_id=poke_id).base_sta
 
     @classmethod
     def create():
         '''
         This is used to create new Pokemon Stat entries.
         '''
-        pass
+        raise NotImplementedError('Currently not supported')
+
+class Evolution(models.Model):
+    '''
+    This holds the various pokemon evolutions.
+    '''
+
+    poke = models.ForeignKey(Pokemon, on_delete=models.CASCADE, related_name='pre')
+    evolution = models.ForeignKey(Pokemon, on_delete=models.CASCADE, related_name='post')

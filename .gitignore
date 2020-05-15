@@ -1,6 +1,6 @@
 poke_calc/poke_calc/__pycache__/*
 poke_calc/logs/*
-poke_calc/poke_calc/migrations
+poke_calc/migrations
 poke_calc/poke_calc/*.sock
 poke_calc/wsgi.py
 

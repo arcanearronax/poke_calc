@@ -1,17 +1,16 @@
 from bs4 import BeautifulSoup
-from selenium import webdriver
 import requests
 import logging
 
 logger = logging.getLogger('baselogger')
 
-class PokemonStatsScraper():
+class PokemonScraper():
     '''
-    This class is used to request individual pokemon stats ffrom pokemongohub.
+    This class is used to request individual pokemon stats from pokemongohub.
     '''
-    base_url = 'https://db.pokemongohub.net/pokemon/{}/iv-chart?level={}'
+    base_url = 'https://db.pokemongohub.net/pokemon/{}'
 
-    def get_stats(dex_num, level, form=''):
+    def get_base_stats(dex_num, level, form=''):
         logger.info('PokemonStatsScraper.get_stats: {} - {} - {}'.format(dex_num, level, form))
 
         assert form in ('', 'Alola'), 'Invalid form provided: {}'.format(form)
@@ -22,33 +21,24 @@ class PokemonStatsScraper():
         else:
             req_url = PokemonStatsScraper.base_url.format(dex_num, level)
 
-        # Open the browser window
-        driver = webdriver.Firefox()
-        driver.get(req_url)
+        # Get the pokemon's page
+        req = requests.get(req_url)
+        assert req.status_code == 200, 'Failed to retrieve page: {}'.format(req.status_code)
 
-        # Find the button
-        driver.find_elements_by_xpath('//button[text()="Next"]')[0]
-        logger.info('Found the button')
+        # Get the entries from the page
+        soup = BeautifulSoup(req.content, 'html.parser')
+        stat_table = soup.find('table', {'class': 'pokemon--stats'})
+        stat_tbody = stat_table.find('tbody')
+        stat_values = stat_tbody.find_all('td')
 
-        # Need to create an array of pages to read data from
-        for _ in range(82):
+        # Parse out the identified entries
+        base_atk = stat_values[1].text
+        base_def = stat_values[2].text
+        base_sta = stat_values[3].text
 
-            # Create a soup object with the page source
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-            logger.info('Created a page')
-
-            # Find the values in each row on the page
-            divs = soup.find_all('div', {'class': 'rt-tr-group'})
-
-            for div in divs:
-                logger.info('Finding Values')
-                # Get the values in the rows
-                cp = divs.find('div', {'class': 'rt-td'}).text
-                logger.info('FOUND VALUE: {}'.format(cp))
-                indiv_atk
-                indiv_def
-                indiv_sta
-
-            # Locate the button
-
-            # Click the button
+        # Return a dict with the base stats
+        return {
+            'base_atk': base_atk,
+            'base_def': base_def,
+            'base_sta': base_sta,
+        }

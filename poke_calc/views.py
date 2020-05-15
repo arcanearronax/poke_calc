@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.template import loader
 from .models import Pokemon
-from .pokemon_scraper import PokemonStatsScraper
+from .pokemon_scraper import PokemonScraper
 import logging
 
 logger = logging.getLogger('baselogger')
