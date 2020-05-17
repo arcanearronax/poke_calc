@@ -1,0 +1,26 @@
+/*
+ *  These settings should be used by any site under arcanedomain.
+ *
+*/
+
+:root {
+  --main-bg-color: #000000;
+  --alt-bg-color: #222222;
+  --main-text-color: #F1F1F1;
+  --alt-text-color: #757575;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: inherit;
+  color: inherit;
+}
+
+label {
+  font-size: 18px;
+}

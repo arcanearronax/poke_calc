@@ -1,14 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-
 <html>
-  <style>
-  </style>
 
-  <head>
-  </head>
+	<head>
+		<!-- Data about page information -->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <body>
-    <h1>It worked</h1>
-  </body>
+		<title>{{ page_title }}</title>
+
+		<!-- Get css and fonts -->
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="static/arcanedomain.css">
+		<link rel="stylesheet" type="text/css" href="static/poke_calc.css">
+		<link rel="icon" href="static/link_icon_96x96.ico">
+
+	</head>
+
+	<body>
+
+		<!-- Page Content -->
+		<main id="main">
+
+			<!-- Header/Home -->
+  		<header>
+
+				<!-- Website Title -->
+				<h1>{{ page_title }}</h1>
+    		<p>{{ page_description }}</p>
+
+  		</header>
+
+      <!-- -->
+  		<body>
+
+        {% block body %}
+        {% endblock %}
+
+      </body>
+
+		<!-- END PAGE CONTENT -->
+		</main>
+
+	</body>
 </html>

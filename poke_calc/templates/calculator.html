@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+  <h2>Calculator Page</h2>
+
+  <div class="w3-text-grey">
+		<form method="POST">
+			{% csrf_token %}
+			<table>
+				{% for field in form %}
+					<tr>
+						<td>{{ field.label_tag }} {{ field }}</td>
+					</tr>
+				{% empty %}
+					<p>none</p>
+				{% endfor %}
+			</table>
+			<input type="submit" value="Submit" id="SubmitButton">
+		</form>
+	</div>
+
+{% endblock %}
