@@ -2,3 +2,7 @@
  *  These settings should be used by any site under arcanedomain.
  *
 */
+
+:root {
+  --place-holder: black;
+}

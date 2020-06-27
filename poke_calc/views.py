@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.views import View
 from django.template import loader
-from .models import Pokemon, PokemonStats, Evolution
+from .models import Pokemon, PokemonStats, Evolution, CPMultiplier
 from .forms import EvolutionForm
 import logging
 
@@ -74,37 +74,69 @@ class EvolutionView(View):
             logger.info('EvolutionView.post: form is valid')
 
             # Get the submitted info
-            poke_name = form.cleaned_data['pokemon']
+            poke_id = form.cleaned_data['pokemon']
             indiv_atk = form.cleaned_data['indiv_atk']
             indiv_def = form.cleaned_data['indiv_def']
             indiv_sta = form.cleaned_data['indiv_sta']
             cp = form.cleaned_data['cp']
 
+            request.session['pokemon'] = poke_id
+            request.session['indiv_atk'] = indiv_atk
+            request.session['indiv_def'] = indiv_def
+            request.session['indiv_sta'] = indiv_sta
+            request.session['cp'] = cp
+
+            logger.info('SESSION_DATA: {}'.format(request.session['cp']))
+
             # Get the pokemon's poke_id
-            logger.info('The form says: {} {} {} {}'.format(poke_name, indiv_atk, indiv_def, indiv_sta))
-            poke_id = Pokemon.get_by_name(poke_name)
+            logger.info('The form says: {} {} {} {} {}'.format(poke_id, indiv_atk, indiv_def, indiv_sta, cp))
             logger.info('Pokemon: {}'.format(poke_id))
 
             # Get provided pokemon's level
-            level = PokemonStats.validate_stats(poke_id, indiv_atk, indiv_def, indiv_sta, cp), 'Invalid Stats Provided'
+            pokemon = Pokemon.get_by_poke_id(poke_id)
+            level = PokemonStats.calculate_level(pokemon, indiv_atk, indiv_def, indiv_sta, cp)
+            logger.info('Got level: {}'.format(level))
 
             # Identify the possible evolutions
             poke_list = Evolution.get_evolutions(poke_id)
+            logger.info('POKE_LIST: {}'.format(poke_list))
 
-            # Calculate the evolution data here
+            # Get the possible cp values for the evolutions
+            evol_cp = {
+                str(evol.get_poke_id()): CPMultiplier.get_cp_values(evol, indiv_atk, indiv_def, indiv_sta, min_level=level) for evol in poke_list
+            }
+
+            # Prep the data for our table
+            evol_data = {
+                str(Pokemon.get_by_poke_id(k).get_name()): v for k,v in evol_cp.items()
+            }
+
+            logger.info('EVOL_DATA: {}'.format(evol_data))
 
             template = loader.get_template('calculator.html')
             context = {
                 'page_title': 'Evolution Calculator',
                 'page_description': "Here are the pokemon's results",
-                'form': EvolutionForm,
-                #'results': evol_data
+                'form': EvolutionForm(initial={
+                    'pokemon': request.session.get('pokemon'),
+                    'indiv_atk': request.session.get('indiv_atk'),
+                    'indiv_def': request.session.get('indiv_def'),
+                    'indiv_sta': request.session.get('indiv_sta'),
+                    'cp': request.session.get('cp'),
+                    }),
+                'evol_data': evol_data
             }
 
         else:
             logger.info('EvolutionView.post: form is invalid')
             logger.info(form.errors)
-
+            template = loader.get_template('calculator.html')
+            context = {
+                'page_title': 'Evolution Calculator',
+                'page_description': "You got an error",
+                'form': EvolutionForm(),
+                #'results': evol_data
+            }
 
 
 

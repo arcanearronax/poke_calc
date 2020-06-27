@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block body %}
@@ -20,5 +21,31 @@
 			<input type="submit" value="Submit" id="SubmitButton">
 		</form>
 	</div>
+
+  <div id="result-div">
+    <table id="result-table">
+      <tr>
+        <th>
+          Level
+        </th>
+        {% for pokemon in evol_data %}
+        <th>
+          {{ pokemon }}
+        </th>
+        {% endfor %}
+      </tr>
+      {% for pokemon in evol_data %}
+        <tr>
+          {% for level in pokemon  %}
+            <td>
+              {{ level }}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+
+    {{ evol_data }}
+  </div>
 
 {% endblock %}

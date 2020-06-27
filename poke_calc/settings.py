@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'poke_calc.apps.PokeCalcApp',
+    'poke_calc.template_tags',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/home/webmaster/poke_calc/poke_calc/templates/static'
+STATIC_ROOT = '/home/webmaster/poke_calc/templates/static'
 
 LOGGING = {
     'version': 1,
